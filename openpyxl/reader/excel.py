@@ -236,7 +236,7 @@ def load_workbook(filename, read_only=False, use_iterators=False, keep_vba=KEEP_
 
     if EXTERNAL_LINK in cts:
         rels = read_rels(archive)
-        wb._external_links = list(detect_external_links(rels, archive))
+        wb._external_links = {book.link_index: book for book in detect_external_links(rels, archive)}
 
 
     archive.close()

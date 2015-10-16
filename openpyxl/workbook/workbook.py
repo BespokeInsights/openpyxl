@@ -35,7 +35,7 @@ class Workbook(object):
         self._sheets = []
         self._active_sheet_index = 0
         self._named_ranges = []
-        self._external_links = []
+        self._external_links = {}
         self.properties = DocumentProperties()
         self.security = DocumentSecurity()
         self.__write_only = write_only or optimized_write
@@ -94,6 +94,16 @@ class Workbook(object):
     @property
     def read_only(self):
         return self.__read_only
+
+    def get_external_workbooks(self):
+        return self._external_links.values()
+
+    def get_external_workbook_by_index(self, index):
+        return self._external_links[index]
+
+    def get_external_sheet_by_index_and_name(self, index, name):
+        workbook = self.get_external_workbook_by_index(index)
+        return workbook.get_sheet_by_name(name)
 
     @property
     def write_only(self):

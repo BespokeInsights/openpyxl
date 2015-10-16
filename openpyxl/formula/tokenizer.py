@@ -43,13 +43,14 @@ class Tokenizer(object):
     TOKEN_ENDERS = ',;}) +-*/^&=><%'  # Each of these characters, marks the
                                        # end of an operand token
 
-    def __init__(self, formula):
+    def __init__(self, formula, ignore_wspace=True):
         self.formula = formula
         self.items = []
         self.token_stack = []  # Used to keep track of arrays, functions, and
                                # parentheses
         self.offset = 0  # How many chars have we read
         self.token = []  # Used to build up token values char by char
+        self.ignore_wspace = ignore_wspace
 
     def parse(self):
         "Populate self.items with the tokens from the formula."
@@ -161,7 +162,8 @@ class Tokenizer(object):
 
         """
         assert self.formula[self.offset] == ' '
-        self.items.append(Token(' ', Token.WSPACE))
+        if not self.ignore_wspace:
+          self.items.append(Token(' ', Token.WSPACE))
         return self.WSPACE_RE.match(self.formula[self.offset:]).end()
 
     def parse_operator(self):
