@@ -116,6 +116,7 @@ class WorkSheetParser(object):
         data_type = element.get('t', 'n')
         coordinate = element.get('r')
         style_id = element.get('s')
+        array_formula = False
 
         # assign formula to cell value unless only the data is desired
         if formula is not None and not self.data_only:
@@ -126,6 +127,9 @@ class WorkSheetParser(object):
                 value = "="
             formula_type = formula.get('t')
             if formula_type:
+                if formula_type == 'array':
+                    array_formula = True
+
                 if formula_type != "shared":
                     self.ws.formula_attributes[coordinate] = dict(formula.attrib)
 
@@ -180,7 +184,7 @@ class WorkSheetParser(object):
             style_array = self.styles[style_id]
 
         row, column = coordinate_to_tuple(coordinate)
-        cell = Cell(self.ws, row=row, col_idx=column, style_array=style_array)
+        cell = Cell(self.ws, row=row, col_idx=column, style_array=style_array, array_formula=array_formula)
         self.ws._cells[(row, column)] = cell
 
         if value is not None:

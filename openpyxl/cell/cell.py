@@ -85,6 +85,7 @@ class Cell(StyleableObject):
         'parent',
         '_hyperlink',
         '_comment',
+        'array_formula'
                  )
 
     ERROR_CODES = ERROR_CODES
@@ -102,7 +103,7 @@ class Cell(StyleableObject):
                    TYPE_NULL, TYPE_INLINE, TYPE_ERROR, TYPE_FORMULA_CACHE_STRING)
 
 
-    def __init__(self, worksheet, column=None, row=None, value=None, col_idx=None, style_array=None):
+    def __init__(self, worksheet, column=None, row=None, value=None, col_idx=None, style_array=None, array_formula=False):
         super(Cell, self).__init__(worksheet, style_array)
         self.row = row
         # _value is the stored value, while value is the displayed value
@@ -115,6 +116,7 @@ class Cell(StyleableObject):
         if column is not None:
             col_idx = column_index_from_string(column)
         self.col_idx = col_idx
+        self.array_formula = array_formula
 
 
     @property
